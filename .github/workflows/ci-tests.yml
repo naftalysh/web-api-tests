@@ -1,0 +1,30 @@
+# This is a basic ci pipeline workflow 
+
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run API Tests
+        run: pytest tests/api --html=reports/api_test_report.html --self-contained-html
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-report
+          path: reports/api_test_report.html
