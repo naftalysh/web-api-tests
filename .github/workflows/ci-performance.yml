@@ -1,0 +1,38 @@
+name: Performance Testing CI/CD
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # Runs every Monday at 3 AM
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Performance Test
+        run: |
+            locust -f tests/performance/locustfile.py \
+              --headless -u 10 -r 1 \
+              --csv reports/locust_report \
+              --host http://your-k8s-service
+  
+      - name: Upload Locust Report Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+            name: locust-performance-report
+            path: |
+              reports/locust_report_stats.csv
+              reports/locust_report_failures.csv
+              reports/locust_report_distribution.csv
