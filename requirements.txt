@@ -1,0 +1,24 @@
+# API testing
+pytest
+pytest-asyncio
+httpx
+requests
+pytest-mock
+
+# Performance testing
+locust
+
+# Reporting
+pytest-html
+allure-pytest
+pytest-reportlog
+junit-xml
+
+# Logging
+loguru
+
+# Test data generation (optional)
+faker
+
+# MongoDB client (optional for DB-driven tests)
+pymongo
